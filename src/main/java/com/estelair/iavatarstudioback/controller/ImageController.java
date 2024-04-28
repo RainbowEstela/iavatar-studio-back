@@ -1,7 +1,9 @@
 package com.estelair.iavatarstudioback.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -21,7 +23,7 @@ public class ImageController {
     private String token;
 
     @PostMapping("/imagen/nueva")
-    public String callOpenAI() { //String peticion
+    public ResponseEntity<?> callOpenAI() { //String peticion
 
         // url
         String url = "https://api.openai.com/v1/images/generations";
@@ -48,8 +50,9 @@ public class ImageController {
         // peticion
         ResponseEntity<?> response = new RestTemplate().postForEntity(url, request, String.class);
 
-        System.out.println(response.getBody());
 
-        return "exito";
+        return ResponseEntity.ok(response.getBody()) ;
     }
+
+
 }
