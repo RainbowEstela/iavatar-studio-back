@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,9 @@ public class ImageController {
     private String token;
 
     @PostMapping("/imagen/nueva")
-    public ResponseEntity<?> callOpenAI() { //String peticion
+    public ResponseEntity<?> callOpenAI(@RequestBody String peticion) {
+        ResponseEntity<?> response =  ResponseEntity.internalServerError().body("Ha habido un error en la petición");
+
 
         // url
         String url = "https://api.openai.com/v1/images/generations";
@@ -40,15 +43,20 @@ public class ImageController {
         // contenido
         Map body = new HashMap();
         body.put("model","dall-e-3");
-        body.put("prompt","a white siamese cat");
+        body.put("prompt", peticion);
         body.put("n",Integer.valueOf(1));
         body.put("size","1024x1024");
 
         // request
         HttpEntity<?> request = new HttpEntity<>(body,headers);
 
-        // peticion
-        ResponseEntity<?> response = new RestTemplate().postForEntity(url, request, String.class);
+        try {
+            // peticion
+            response = new RestTemplate().postForEntity(url, request, String.class);
+        } catch (Exception e) {
+            return response;
+        }
+
 
 
         return ResponseEntity.ok(response.getBody()) ;
