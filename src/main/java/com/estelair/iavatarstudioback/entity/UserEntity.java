@@ -32,6 +32,10 @@ public class UserEntity implements UserDetails {
     private List<UserAuthority> authorities = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "creador",fetch = FetchType.EAGER)
+    private List<ImageEntity> imagenes;
+
+
     public UserEntity() {
     }
 

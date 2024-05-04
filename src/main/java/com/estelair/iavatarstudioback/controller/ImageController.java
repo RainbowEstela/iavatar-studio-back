@@ -1,10 +1,17 @@
 package com.estelair.iavatarstudioback.controller;
 
+import com.estelair.iavatarstudioback.entity.ImageEntity;
+import com.estelair.iavatarstudioback.entity.UserEntity;
+import com.estelair.iavatarstudioback.service.ImageEntityService;
+import com.estelair.iavatarstudioback.service.UserEntityService;
 import org.apache.coyote.Response;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +29,12 @@ import java.util.Map;
 public class ImageController {
     @Value("${spring.external.token}")
     private String token;
+
+    @Autowired
+    private ImageEntityService imageEntityService;
+
+    @Autowired
+    private UserEntityService userEntityService;
 
     @PostMapping("/imagen/nueva")
     public ResponseEntity<?> callOpenAI(@RequestBody String peticion) {
@@ -58,6 +71,22 @@ public class ImageController {
         }
 
         return ResponseEntity.ok(response.getBody()) ;
+    }
+
+    @PostMapping("/imagen/guardar")
+    public ResponseEntity<ImageEntity> guardar(@RequestBody ImageEntity image) {
+        // buscar el nick del usuario
+        String userString = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // pasar el nick a objeto
+        UserEntity userObject = this.userEntityService.findByUsername(userString).orElse(null);
+
+        // guardar el usuario objeto en imagen
+        image.setCreador(userObject);
+
+        // guardar la imagen objeto
+        this.imageEntityService.save(image);
+        return ResponseEntity.ok(image);
     }
 
 }
