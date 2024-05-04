@@ -57,10 +57,7 @@ public class ImageController {
             return response;
         }
 
-
-
         return ResponseEntity.ok(response.getBody()) ;
     }
-
 
 }
