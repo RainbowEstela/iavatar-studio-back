@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -19,9 +21,14 @@ public class ImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  //Autoincrement
     private Long id;
 
+    @Column(columnDefinition = "TEXT")
     private String prompt;
 
     private String imagenNombre;
+
+    private LocalDate fechaCreacion;
+
+    private Boolean favorito;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_creador"))
