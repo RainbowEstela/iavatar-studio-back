@@ -170,6 +170,17 @@ public class ImageController {
         return ResponseEntity.ok(imagen);
     }
 
+    @GetMapping("/imagen/mostrar/{id}")
+    public ResponseEntity<ImageEntity> findById(@PathVariable Long id) {
+        ImageEntity imagen = this.imageEntityService.findById(id).orElse(null);
+
+        if(imagen == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(imagen);
+    }
+
     @GetMapping("/imagen/desfavorito/{idImagen}")
     public ResponseEntity<ImageEntity> changeFavoritoFalse(@PathVariable Long idImagen) {
 

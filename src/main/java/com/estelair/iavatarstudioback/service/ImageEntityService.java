@@ -50,7 +50,7 @@ public class ImageEntityService {
         imageEntityRepository.save(image);
 
         image.setCreador(creador);
-        image.setFavorito(true);
+        image.setFavorito(false);
         image.setFechaCreacion(LocalDate.now());
         image.setPrompt(prompt);
 
@@ -60,7 +60,7 @@ public class ImageEntityService {
             URL url = uri.toURL();
 
             InputStream inputStream = url.openStream();
-            Files.copy(inputStream, Paths.get("C:/Users/user/Desktop/spring-imagenes/"+ image.getId() +".png"));
+            Files.copy(inputStream, Paths.get(directorio + image.getId() +".png"));
 
         } catch ( Exception e) {
 
@@ -72,7 +72,6 @@ public class ImageEntityService {
 
         return imageEntityRepository.save(image);
     }
-
 
     // Busca las imagenes de un usuario
     public List<ImageEntity> findByCreador(UserEntity creador) {
