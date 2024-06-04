@@ -97,4 +97,11 @@ public class ImageEntityService {
 
         return imagen;
     }
+
+    // calcula las peticiones en el dia de hoy y las devuelve
+    public Integer peticionesDeHoy(UserEntity creador) {
+        List<ImageEntity> imagenesHoy = this.imageEntityRepository.findByCreadorAndFechaCreacion(creador, LocalDate.now());
+
+        return imagenesHoy.size();
+    }
 }

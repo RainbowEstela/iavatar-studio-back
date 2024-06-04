@@ -48,6 +48,13 @@ public class ImageController {
         // pasar el nick a objeto
         UserEntity userObject = this.userEntityService.findByUsername(userString).orElse(null);
 
+        // calcular las peticiones de hoy
+        Integer peticionesHoy = this.imageEntityService.peticionesDeHoy(userObject);
+
+        if(peticionesHoy >= 3) {
+            return ResponseEntity.internalServerError().build();
+        }
+
 
         // LLAMAR A OPEN AI
         ResponseEntity<?> response =  ResponseEntity.internalServerError().body("Ha habido un error en la petición");
@@ -92,7 +99,6 @@ public class ImageController {
 
 
         return ResponseEntity.ok(imagen);
-
     }
 
 
