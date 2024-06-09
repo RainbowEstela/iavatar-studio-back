@@ -10,6 +10,6 @@ public class AdditionalResourceWebConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/spring-imagenes/**")
-                .addResourceLocations("file:///C:/Users/user/Desktop/spring-imagenes/");
+                .addResourceLocations("file:/media/");
     }
 }
